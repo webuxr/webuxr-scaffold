@@ -1,0 +1,56 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Foundation</title>
+
+    {% block head %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if header.description %}
+    <meta name="description" content="{{ header.description }}">
+    {% else %}
+    <meta name="description" content="{{ site.description }}">
+    {% endif %}
+    {% if header.robots %}
+    <meta name="robots" content="{{ header.robots }}">
+    {% endif %}
+    <link rel="icon" type="image/png" href="{{ theme_url }}/images/favicon.png">
+
+    <title>{% if header.title %}{{ header.title }} | {% endif %}{{ site.title }}</title>
+
+    {% block stylesheets %}
+        {# Bootstrap core CSS #}
+        {% do assets.add('theme://app/bower_components/foundation/css/foundation.min.css',101) %}
+
+    {# Custom styles for this theme #}
+        {% do assets.add('theme://css/foundation-custom.css',100) %}
+
+        {{ assets.css() }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {% do assets.add('theme://app/bower_components/jquery/dist/jquery.min.js', 101) %}
+        {% do assets.add('theme://app/bower_components/foundation/js/foundation.min.js') %}
+
+
+        {{ assets.js() }}
+    {% endblock %}
+
+    {% endblock head %}
+  </head>
+  <body>
+
+    {# include the header + navigation #}
+    {% include 'partials/header.html.twig' %}
+
+    <div class="row">
+      <div class="large-12 columns">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+
+    {% block bottom %}{% endblock %}
+  </body>
+</html>
