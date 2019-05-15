@@ -1,0 +1,29 @@
+{% extends 'partials/base.html.twig' %}
+
+{% set show_onpage_menu = header.onpage_menu == true or header.onpage_menu is null %}
+{% macro pageLinkName(text) %}{{ text|lower|replace({' ':'_'}) }}{% endmacro %}
+
+{% block bottom %}
+    {{ parent() }}
+{% endblock %}
+
+{% block header_navigation %}
+    {{  parent() }}
+{% endblock %}
+
+{% block content %}
+    <section id="body" class="grid-container">
+        <div class="grid-x grid-margin-x">
+            <div class="cell small-12">
+                {{ page.content }}
+            </div>
+        </div>
+        <div class="grid-x grid-margin-x">
+            {% for module in page.collection() %}
+                <div class="cell small-12" id="{{ _self.pageLinkName(module.menu) }}" {% if module.header.title|contains('In Page Navigation') or module.header.title|contains('Showcase') %}{% else %}data-magellan-target="{{ _self.pageLinkName(module.menu) }}{% endif %}">
+                	{{ module.content }}
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% macro loop(page) %}
+    {% for p in page.children.visible %}
+        {% set current_page = (p.active or p.activeChild) ? 'selected' : '' %}
+        {% if p.children.visible.count > 0 %}
+            <li class="has-children {{ current_page }}">
+                <a href="{{ p.url }}">
+                    {% if p.header.icon %}<i class="fa fa-{{ p.header.icon }}"></i>{% endif %}
+                    {{ p.menu }}
+                </a>
+                <ul>
+                    {{ _self.loop(p) }}
+                </ul>
+            </li>
+        {% else %}
+            <li class="{{ current_page }}">
+                <a href="{{ p.url }}">
+                    {% if p.header.icon %}<i class="fa fa-{{ p.header.icon }}"></i>{% endif %}
+                    {{ p.menu }}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+<div class="title-bar" data-responsive-toggle="main-menu" data-hide-for="medium">
+  <button class="menu-icon" type="button" data-toggle></button>
+  <div class="title-bar-title">Menu</div>
+</div>
+
+<div class="top-bar" id="main-menu" data-animate="hinge-in-from-top spin-out">
+  <div class="top-bar-left">
+    <ul class="dropdown menu" data-dropdown-menu>
+      <li class="menu-text">
+          <a class="logo left" href="{{ base_url == '' ? '/' : base_url }}">
+            <i class="fa fa-rebel"></i>
+            {{ config.site.title }}
+          </a>
+      </li>
+      <li>
+        {% if theme_config.dropdown.enabled %}
+            {{ _self.loop(pages) }}
+        {% else %}
+            {% for page in pages.children.visible %}
+                {% set current_page = (page.active or page.activeChild) ? 'selected' : '' %}
+                <li class="{{ current_page }}">
+                    <a href="{{ page.url }}">
+                        {% if page.header.icon %}<i class="fa fa-{{ page.header.icon }}"></i>{% endif %}
+                        {{ page.menu }}
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
+        {% for mitem in site.menu %}
+            <li>
+                <a href="{{ mitem.url }}">
+                    {% if mitem.icon %}<i class="fa fa-{{ mitem.icon }}"></i>{% endif %}
+                    {{ mitem.text }}
+                </a>
+            </li>
+        {% endfor %}
+      </li>
+      <li><a href="#">Two</a></li>
+      <li><a href="#">Three</a></li>
+    </ul>
+  </div>
+</div>
